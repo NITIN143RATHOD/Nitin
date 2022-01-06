@@ -1,0 +1,145 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include<conio.h>
+
+int a, b, height = 20, width = 20;
+int gameover, score;
+int x, y, foodx, foody, flag;
+
+                                                                  
+
+void setup()
+{
+	gameover = 0;
+
+	x = height / 2;
+	y = width / 2;
+level1:
+	foodx = rand() % 20;
+	if (foodx == 0)
+		goto level1;
+level2:
+	foody = rand() % 20;
+	if (foody == 0)
+		goto level2;
+	score = 0;
+}
+
+                                                                 
+void draw()
+{
+	system("cls");
+	for (a = 0; a < height; a++) {
+		for (b = 0; b < width; b++) {
+			if (a == 0 || a == width - 1
+				|| b == 0
+				|| b == height - 1) {
+				printf("N");
+			}
+			else {
+				if (a == x && b == y)
+					printf("0");
+				else if (a == foodx
+						&& b == foody)
+					printf("*");
+				else
+					printf(" ");
+			}
+		}
+		printf("\n");
+	}
+
+	printf("score = %d", score);
+	printf("\n");
+	printf("press F to quit the game");
+}
+
+
+void input()
+{
+	if (kbhit()) {
+		switch (getch()) {
+		case 'a':
+			flag = 1;
+			break;
+		case 's':
+			flag = 2;
+			break;
+		case 'd':
+			flag = 3;
+			break;
+		case 'w':
+			flag = 4;
+			break;
+		case 'f':
+		gameover = 1;
+			break;
+		}
+	}
+}
+
+                                                            
+
+void logic()
+{
+	sleep(0.5);                                             
+	switch (flag) {
+	case 1:
+		y--;
+		break;
+	case 2:
+		x++;
+		break;
+	case 3:
+		y++;
+		break;
+	case 4:
+		x--;
+		break;
+	default:
+		break;
+	}
+
+	                                                      
+	if (x < 0 || x > height
+		|| y < 0 || y > width)
+		gameover = 1;
+
+	
+	                                                       
+	if (x == foodx && y == foody) {
+	level3:
+		foodx = rand() % 11;
+		if (foodx == 0)
+			goto level3;
+
+	
+	                                                     
+	level4:
+		foody = rand() % 11;
+		if (foody == 0)
+			goto level4;
+		score += 10;
+	}
+}
+
+
+int main()
+{
+	int m, n;
+
+                                                             	
+	setup();
+
+	                                                            
+	
+	
+	while (!gameover) {
+
+		                                                        
+		draw();
+		input();
+		logic();
+	}
+}
